@@ -10,44 +10,49 @@ static void ErrorHandling(char*);
 int main(int argc, char* argv[])
 {
 	WSADATA wsaData;
-	SOCKET servSock;
+	SOCKET sock;
 	int clntAdrSz;
 	SOCKADDR_IN servAdr, clntAdr;
 	UPOINT        ptend;
 
 	int	loop = 1;
 
-	if (argc != 2)
+	if (argc != 3)
 	{
-		printf("Usage : %s <port>\n", argv[0]);
+		printf("Usage : %s <IP> <port>\n", argv[0]);
 		exit(1);
 	}
 
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 		ErrorHandling("WSAStartup() error!");
 
-	servSock = socket(PF_INET, SOCK_DGRAM, 0);
-	if (servSock == INVALID_SOCKET)
+	sock = socket(PF_INET, SOCK_DGRAM, 0);
+	if (sock == INVALID_SOCKET)
 		ErrorHandling("UDP socket creation error");
 
 	memset(&servAdr, 0, sizeof(servAdr));
 	servAdr.sin_family = AF_INET;
-	servAdr.sin_addr.s_addr = htonl(INADDR_ANY);
-	servAdr.sin_port = htons(atoi(argv[1]));
+	servAdr.sin_addr.s_addr = inet_addr(argv[1]);
+	servAdr.sin_port = htons(atoi(argv[2]));
 
-	if (bind(servSock, (SOCKADDR*)&servAdr, sizeof(servAdr)) == SOCKET_ERROR)
-		ErrorHandling("bind() error");
+	connect(sock, (SOCKADDR*)&servAdr, sizeof(servAdr));
 
 	while (1)
 	{
-		clntAdrSz = sizeof(clntAdr);
-		// strLen = recvfrom(servSock, message, buf_size, 0, (SOCKADDR*)&clntAdr, &clntAdrSz);
-		//sendto(servSock, message, strLen, 0, (SOCKADDR*)&clntAdr, sizeof(clntAdr));
+		fputs("Insert message(q to quit): ", stdout);
+		//fgets(message, sizeof(message), stdin);
+		//if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
+		//	break;
+
+		//send(sock, message, strlen(message), 0);
+		//strLen = recv(sock, message, sizeof(message) - 1, 0);
+		//message[strLen] = 0;
+		//printf("Message from server: %s", message);
 	}
-	closesocket(servSock);
+	closesocket(sock);
 	WSACleanup();
 
-	return 0;
+	//return 0;
 
 	Aboom[0] = "i<^>i";
 	Aboom[1] = "i(*)i";
