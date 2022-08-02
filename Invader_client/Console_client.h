@@ -1,5 +1,5 @@
-#ifndef __CONSOLE_H__
-#define __CONSOLE_H__
+#ifndef __CONSOLE_CLIENT_H__
+#define __CONSOLE_CLIENT_H__
 
 #include <windows.h>
 #include <wincon.h>

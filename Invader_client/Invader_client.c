@@ -1,4 +1,4 @@
-#include "Main.h"
+#include "Main_client.h"
 UPOINT ptthisMypos;
 UPOINT ptthisMypos2;
 int    timeflag = FALSE;
@@ -7,7 +7,7 @@ char* Aboom[8];
 
 static void ErrorHandling(char*);
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 	WSADATA wsaData;
 	SOCKET servSock;
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 		ErrorHandling("WSAStartup() error!");
-	
+
 	servSock = socket(PF_INET, SOCK_DGRAM, 0);
 	if (servSock == INVALID_SOCKET)
 		ErrorHandling("UDP socket creation error");
@@ -41,13 +41,13 @@ int main(int argc, char *argv[])
 	while (1)
 	{
 		clntAdrSz = sizeof(clntAdr);
-		//strLen = recvfrom(servSock, message, buf_size, 0, (SOCKADDR*)&clntAdr, &clntAdrSz);
+		// strLen = recvfrom(servSock, message, buf_size, 0, (SOCKADDR*)&clntAdr, &clntAdrSz);
 		//sendto(servSock, message, strLen, 0, (SOCKADDR*)&clntAdr, sizeof(clntAdr));
 	}
 	closesocket(servSock);
 	WSACleanup();
 
-	//return 0;
+	return 0;
 
 	Aboom[0] = "i<^>i";
 	Aboom[1] = "i(*)i";

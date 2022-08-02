@@ -1,5 +1,5 @@
-#ifndef __MAIN_H__
-#define __MAIN_H__
+#ifndef __MAIN_CLIENT_H__
+#define __MAIN_CLIENT_H__
 
 #define MAX_ENEMY           40  
 #define MAXENEMY_BASE_ROW    4   
@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include <conio.h>
 #include <wincon.h>
-#include "console.h"
+#include "console_client.h"
 #include <stdlib.h>
 #include <string.h>
 
