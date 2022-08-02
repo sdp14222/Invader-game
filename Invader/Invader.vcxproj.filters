@@ -15,24 +15,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\2022_08_01\2019 04 19 TCP-IP 과정 유비쿼스 - stick\000-금요일 제출 하실 미니 프로젝트\2018-takehome\03_인베이더2001\인베이더2001_win_소스\Mychar.c">
+    <ClCompile Include="Console.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\2022_08_01\2019 04 19 TCP-IP 과정 유비쿼스 - stick\000-금요일 제출 하실 미니 프로젝트\2018-takehome\03_인베이더2001\인베이더2001_win_소스\Console.c">
+    <ClCompile Include="Invader.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\2022_08_01\2019 04 19 TCP-IP 과정 유비쿼스 - stick\000-금요일 제출 하실 미니 프로젝트\2018-takehome\03_인베이더2001\인베이더2001_win_소스\Invader.c">
+    <ClCompile Include="Juck.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\2022_08_01\2019 04 19 TCP-IP 과정 유비쿼스 - stick\000-금요일 제출 하실 미니 프로젝트\2018-takehome\03_인베이더2001\인베이더2001_win_소스\Juck.c">
+    <ClCompile Include="Mychar.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\2022_08_01\2019 04 19 TCP-IP 과정 유비쿼스 - stick\000-금요일 제출 하실 미니 프로젝트\2018-takehome\03_인베이더2001\인베이더2001_win_소스\Console.h">
+    <ClInclude Include="Console.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\2022_08_01\2019 04 19 TCP-IP 과정 유비쿼스 - stick\000-금요일 제출 하실 미니 프로젝트\2018-takehome\03_인베이더2001\인베이더2001_win_소스\Main.h">
+    <ClInclude Include="Main.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
