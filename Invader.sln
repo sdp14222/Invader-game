@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.32630.194
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Invader", "Invader\Invader.vcxproj", "{4B33A3E9-5D67-439E-A8A3-C23CA71CE858}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Invader_client", "Invader_client\Invader_client.vcxproj", "{D5F5238C-6816-49DC-8462-08DD1AA5ECED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{4B33A3E9-5D67-439E-A8A3-C23CA71CE858}.Release|x64.Build.0 = Release|x64
 		{4B33A3E9-5D67-439E-A8A3-C23CA71CE858}.Release|x86.ActiveCfg = Release|Win32
 		{4B33A3E9-5D67-439E-A8A3-C23CA71CE858}.Release|x86.Build.0 = Release|Win32
+		{D5F5238C-6816-49DC-8462-08DD1AA5ECED}.Debug|x64.ActiveCfg = Debug|x64
+		{D5F5238C-6816-49DC-8462-08DD1AA5ECED}.Debug|x64.Build.0 = Debug|x64
+		{D5F5238C-6816-49DC-8462-08DD1AA5ECED}.Debug|x86.ActiveCfg = Debug|Win32
+		{D5F5238C-6816-49DC-8462-08DD1AA5ECED}.Debug|x86.Build.0 = Debug|Win32
+		{D5F5238C-6816-49DC-8462-08DD1AA5ECED}.Release|x64.ActiveCfg = Release|x64
+		{D5F5238C-6816-49DC-8462-08DD1AA5ECED}.Release|x64.Build.0 = Release|x64
+		{D5F5238C-6816-49DC-8462-08DD1AA5ECED}.Release|x86.ActiveCfg = Release|Win32
+		{D5F5238C-6816-49DC-8462-08DD1AA5ECED}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
