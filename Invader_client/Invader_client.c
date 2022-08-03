@@ -163,6 +163,8 @@ int main(int argc, char* argv[])
 				loop = 0;
 		}
 	}
+	strcpy(message, "quitandclose");
+	send(sock, message, strlen(message), 0);
 	closesocket(sock);
 	WSACleanup();
 	return 0;
@@ -183,16 +185,6 @@ void  play()
 	InitConsole();
 	InitMyship();
 	Initenemyship();
-
-#if 0
-	hSndThread =
-		(HANDLE)_beginthreadex(NULL, 0, SendMsg, (void*)&sock, 0, NULL);
-	hRcvThread =
-		(HANDLE)_beginthreadex(NULL, 0, RecvMsg, (void*)&sock, 0, NULL);
-
-	WaitForSingleObject(hSndThread, INFINITE);
-	WaitForSingleObject(hRcvThread, INFINITE);
-#endif
 
 	ptthisMypos.x = ptMyoldpos.x = MYSHIP_BASE_POSX;
 	ptthisMypos.y = ptMyoldpos.y = MYSHIP_BASE_POSY;
@@ -319,9 +311,7 @@ unsigned WINAPI SendMsg(void* arg)   // send thread main
 		if (!s_flag)
 		{
 			Sleep(500);
-			//gotoxy(pos);
 			fputs("Insert message(q to quit, s to start): ", stdout);
-			//fputs("input(r or s) : ", stdout);
 			fgets(message, sizeof(message), stdin);
 			if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
 			{

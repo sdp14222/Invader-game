@@ -15,26 +15,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Console.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Invader.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Juck.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Mychar.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="invader_server.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Console.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Main.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>

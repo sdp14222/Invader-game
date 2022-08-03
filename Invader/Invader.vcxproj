@@ -140,14 +140,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Console.c" />
-    <ClCompile Include="Invader.c" />
     <ClCompile Include="invader_server.c" />
-    <ClCompile Include="Juck.c" />
-    <ClCompile Include="Mychar.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Console.h" />
     <ClInclude Include="Main.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
