@@ -16,6 +16,8 @@ char name[NAME_SIZE] = "[DEFAULT]";
 char msg[BUF_SIZE];
 
 static SOCKET sock;
+static HANDLE hSndThread, hRcvThread;
+static s_flag = 0;
 #if 0
 int main(int argc, char* argv[])
 {
@@ -57,7 +59,7 @@ int main(int argc, char* argv[])
 
 	//SOCKET hSock;
 	//SOCKADDR_IN servAdr;
-	HANDLE hSndThread, hRcvThread;
+	//HANDLE hSndThread, hRcvThread;
 #if 0
 	if (argc != 4) {
 		printf("Usage : %s <IP> <port> <name>\n", argv[0]);
@@ -121,6 +123,7 @@ int main(int argc, char* argv[])
 		puts("Connected.............");
 
 
+#if 0
 	hSndThread =
 		(HANDLE)_beginthreadex(NULL, 0, SendMsg, (void*)&sock, 0, NULL);
 	hRcvThread =
@@ -129,6 +132,7 @@ int main(int argc, char* argv[])
 	WaitForSingleObject(hSndThread, INFINITE);
 	WaitForSingleObject(hRcvThread, INFINITE);
 
+#endif
 	temp_pos.x = 100;
 	temp_pos.y = 200;
 
@@ -197,11 +201,6 @@ int main(int argc, char* argv[])
 		printf("Message from server: %s", message);
 #endif
 	}
-	printf("end\n");
-	//closesocket(sock);
-	//WSACleanup();
-
-	return 0;
 
 	Aboom[0] = "i<^>i";
 	Aboom[1] = "i(*)i";
@@ -214,57 +213,73 @@ int main(int argc, char* argv[])
 	ptend.x = 36;
 	ptend.y = 12;
 
+	hSndThread =
+		(HANDLE)_beginthreadex(NULL, 0, SendMsg, (void*)&sock, 0, NULL);
+	hRcvThread =
+		(HANDLE)_beginthreadex(NULL, 0, RecvMsg, (void*)&sock, 0, NULL);
+
+	//WaitForSingleObject(hSndThread, INFINITE);
+	//WaitForSingleObject(hRcvThread, INFINITE);
+
 	while (loop)
 	{
 		DWORD         thisTickCount = GetTickCount();
 		DWORD         bcount = thisTickCount;
 		int           bp = 0;
 
-		play();
-
-		for (;;)
+		if (s_flag)
 		{
-			if (timeflag == FALSE)
-			{
-				thisTickCount = GetTickCount();
+			system("cls");
+			play();
 
-				if (thisTickCount - bcount > 100)
+			for (;;)
+			{
+				if (timeflag == FALSE)
 				{
-					gotoxy(ptthisMypos);
-					gotoxy(ptthisMypos2);
-					printf("%s", Aboom[bp]);
-					bp++;
-					if (bp > 7)
-						break;
-					bcount = thisTickCount;
+					thisTickCount = GetTickCount();
+
+					if (thisTickCount - bcount > 100)
+					{
+						gotoxy(ptthisMypos);
+						gotoxy(ptthisMypos2);
+						printf("%s", Aboom[bp]);
+						bp++;
+						if (bp > 7)
+							break;
+						bcount = thisTickCount;
+					}
 				}
+				else
+					break;
+			}
+
+			gotoxy(ptend);
+			printf("당신의 비행기는 파괴되었습니다.");
+			ptend.y += 1;
+			gotoxy(ptend);
+			printf("다시 할까요? (y/n)\n");
+
+			if (_getch() == 'y')
+			{
+				ClearScreen();
+				bp = 0;
+				killnum = 0;
+				timeflag = 0;
+				ptend.y = 12;
+				loop = 1;
 			}
 			else
-				break;
+				loop = 0;
 		}
-
-		gotoxy(ptend);
-		printf("당신의 비행기는 파괴되었습니다.");
-		ptend.y += 1;
-		gotoxy(ptend);
-		printf("다시 할까요? (y/n)\n");
-
-		if (_getch() == 'y')
-		{
-			ClearScreen();
-			bp = 0;
-			killnum = 0;
-			timeflag = 0;
-			ptend.y = 12;
-			loop = 1;
-		}
-		else
-			loop = 0;
 	}
+	closesocket(sock);
+	WSACleanup();
+	return 0;
 }
 
 void  play()
 {
+#if 1
 	static UPOINT ptMyoldpos;
 	static UPOINT ptMyoldpos2;
 	DWORD         gthisTickCount = GetTickCount();
@@ -277,6 +292,16 @@ void  play()
 	InitConsole();
 	InitMyship();
 	Initenemyship();
+
+#if 0
+	hSndThread =
+		(HANDLE)_beginthreadex(NULL, 0, SendMsg, (void*)&sock, 0, NULL);
+	hRcvThread =
+		(HANDLE)_beginthreadex(NULL, 0, RecvMsg, (void*)&sock, 0, NULL);
+
+	WaitForSingleObject(hSndThread, INFINITE);
+	WaitForSingleObject(hRcvThread, INFINITE);
+#endif
 
 	ptthisMypos.x = ptMyoldpos.x = MYSHIP_BASE_POSX;
 	ptthisMypos.y = ptMyoldpos.y = MYSHIP_BASE_POSY;
@@ -375,7 +400,7 @@ void  play()
 			gCount = gthisTickCount;
 		}
 	}
-
+#endif
 }
 
 static void ErrorHandling(char* message)
@@ -387,8 +412,6 @@ static void ErrorHandling(char* message)
 
 unsigned WINAPI SendMsg(void* arg)   // send thread main
 {
-	//SOCKET hSock = *((SOCKET*)arg);
-	//char nameMsg[NAME_SIZE + BUF_SIZE];
 	char message[100];
 	while (1)
 	{
@@ -401,16 +424,34 @@ unsigned WINAPI SendMsg(void* arg)   // send thread main
 			exit(0);
 		}
 		sprintf(nameMsg, "%s %s", name, msg);
-		//send(hSock, nameMsg, strlen(nameMsg), 0);
 #endif
-		Sleep(500);
-		fputs("Insert message(q to quit, s to start): ", stdout);
-		//fputs("input(r or s) : ", stdout);
-		fgets(message, sizeof(message), stdin);
-		if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
-			exit(1);
-			//break;
-		send(sock, message, strlen(message), 0);
+		if (!s_flag)
+		{
+			Sleep(500);
+			//gotoxy(pos);
+			fputs("Insert message(q to quit, s to start): ", stdout);
+			//fputs("input(r or s) : ", stdout);
+			fgets(message, sizeof(message), stdin);
+			if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
+			{
+				strcpy(message, "quitandclose");
+				send(sock, message, strlen(message), 0);
+				int a = closesocket(sock);
+				printf("closesocket() %d\n", a);
+				WSACleanup();
+				//exit(1);
+				break;
+			}
+			if (!strcmp(message, "s\n") || !strcmp(message, "S\n"))
+			{
+				strcpy(message, "startandclear");
+			}
+			send(sock, message, strlen(message), 0);
+		}
+		else
+		{
+
+		}
 	}
 	return 0;
 }
@@ -419,25 +460,36 @@ unsigned WINAPI RecvMsg(void* arg)   // read thread main
 {
 	char message[100];
 	int recv_cnt;
-	//message[recv_cnt] = 0;
-	//printf("message from server : %s\n", message);
-	//int hSock = *((SOCKET*)arg);
-	//char nameMsg[NAME_SIZE + BUF_SIZE];
-	//int strLen;
-	UPOINT pos = { 60, 40 };
+
 	while (1)
 	{
+		if (!s_flag)
+		{
 #if 0
-		strLen = recv(hSock, nameMsg, NAME_SIZE + BUF_SIZE - 1, 0);
-		if (strLen == -1)
-			return -1;
-		nameMsg[strLen] = 0;
-		fputs(nameMsg, stdout);
+			strLen = recv(hSock, nameMsg, NAME_SIZE + BUF_SIZE - 1, 0);
+			if (strLen == -1)
+				return -1;
+			nameMsg[strLen] = 0;
+			fputs(nameMsg, stdout);
 #endif
-		recv_cnt = recv(sock, message, sizeof(message) - 1, 0);
-		message[recv_cnt] = 0;
-		//gotoxy(pos);
-		printf("\n\nmessage from server : \n\n%s\n\n", message);
+			recv_cnt = recv(sock, message, sizeof(message) - 1, 0);
+			message[recv_cnt] = 0;
+
+			if (strstr(message, "startandclear"))
+			{
+				s_flag = 1;
+			}
+			else
+			{
+				printf("\nmessage from server : %s\n", message);
+			}
+			//gotoxy(pos);
+			//printf("\nmessage from server : %s\n", message);
+		}
+		else
+		{
+
+		}
 	}
 	return 0;
 }

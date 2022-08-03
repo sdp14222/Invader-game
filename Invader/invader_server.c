@@ -91,6 +91,7 @@ int main(int argc, char* argv[])
 					}
 					else
 					{
+#if 0
 						switch (buf[0])
 						{
 						case 'r':
@@ -102,6 +103,24 @@ int main(int argc, char* argv[])
 						default:
 							send(reads.fd_array[i], buf, strLen, 0);    // echo!
 							break;
+						}
+#endif
+						if (strstr(buf, "quitandclose"))
+						{
+							FD_CLR(reads.fd_array[i], &reads);
+							closesocket(cpyReads.fd_array[i]);
+							printf("closed client: %d \n", cpyReads.fd_array[i]);
+						}
+						else if(strstr(buf, "startandclear"))
+						{
+							for (i = 1; i < reads.fd_count; i++)
+							{
+								send(reads.fd_array[i], buf, strLen, 0);    // echo!
+							}
+						}
+						else
+						{
+							send(reads.fd_array[i], buf, strLen, 0);    // echo!
 						}
 					}
 				}
