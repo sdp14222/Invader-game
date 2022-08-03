@@ -1,4 +1,4 @@
-#include "main_client.h"
+#include "Main_client.h"
 
 char  enemyship_shape[5] = "^V^";
 

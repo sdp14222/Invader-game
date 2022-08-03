@@ -1,4 +1,4 @@
-#include "main_client.h"
+#include "Main_client.h"
 
 MYSHIP  myship;
 BULLET myship_bullet[MAXMY_BULLET];

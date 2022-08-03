@@ -1,4 +1,5 @@
-#include "main.h"
+#include "Main.h"
+#if 0
 
 char  enemyship_shape[5] = "^V^";
 
@@ -226,4 +227,4 @@ void CheckenemyBullet(ENEMYSHIP* enemyship)
 		}
 	}
 }
-
+#endif

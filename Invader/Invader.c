@@ -1,19 +1,31 @@
 #include "Main.h"
-UPOINT ptthisMypos;
-UPOINT ptthisMypos2;
+#if 0
+UPOINT user_pos[USER_MAX_SIZE];
+struct USER_ADDR_INFO
+{
+	SOCKET sock;
+	SOCKADDR_IN sock_addr;
+	int clntAdrSz;
+};
+struct USER_ADDR_INFO user_addr_info[USER_MAX_SIZE];
+static UPOINT ptthisMypos;
+static UPOINT ptthisMypos2;
 int    timeflag = FALSE;
 int    score, hiscore = 2000, killnum;
 char* Aboom[8];
 
 static void ErrorHandling(char*);
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 	WSADATA wsaData;
-	SOCKET servSock;
+	SOCKET servSock, clientSock;
 	int clntAdrSz;
 	SOCKADDR_IN servAdr, clntAdr;
 	UPOINT        ptend;
+	UPOINT temp_pos;
+	int temp_pos_len;
+	int i;
 
 	int	loop = 1;
 
@@ -25,10 +37,16 @@ int main(int argc, char *argv[])
 
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 		ErrorHandling("WSAStartup() error!");
-	
+
+#if 0
 	servSock = socket(PF_INET, SOCK_DGRAM, 0);
 	if (servSock == INVALID_SOCKET)
 		ErrorHandling("UDP socket creation error");
+#endif
+
+	servSock = socket(PF_INET, SOCK_STREAM, 0);
+	if (servSock == INVALID_SOCKET)
+		ErrorHandling("socket() error");
 
 	memset(&servAdr, 0, sizeof(servAdr));
 	servAdr.sin_family = AF_INET;
@@ -38,15 +56,47 @@ int main(int argc, char *argv[])
 	if (bind(servSock, (SOCKADDR*)&servAdr, sizeof(servAdr)) == SOCKET_ERROR)
 		ErrorHandling("bind() error");
 
+	if (listen(servSock, USER_MAX_SIZE) == SOCKET_ERROR)
+		ErrorHandling("listen() error");
+
+	clntAdrSz = sizeof(clntAdr);
+
+	for (i = 1; i < USER_MAX_SIZE; i++)
+	{
+		printf("%d\n", i);
+		clientSock = accept(servSock, (SOCKADDR*)&clntAdr, &clntAdrSz);
+		if (clientSock == -1)
+			ErrorHandling("accept() error");
+		else
+			printf("Connected client %d\n", i);
+
+		user_addr_info[i].sock_addr = clntAdr;
+		user_addr_info[i].sock_addr = clntAdr;
+		user_addr_info[i].clntAdrSz = clntAdrSz;
+		
+		send(clientSock, &user_addr_info[i+1], sizeof(struct USER_ADDR_INFO), 0);
+#if 0
+		while ((strLen = recv(clientSock, message, buf_size, 0)) != 0)
+			send(clientSock, message, strLen, 0);
+#endif
+	}
+	closesocket(clientSock);
+	closesocket(servSock);
+	WSACleanup();
+
+#if 0
 	while (1)
 	{
 		clntAdrSz = sizeof(clntAdr);
 		//strLen = recvfrom(servSock, message, buf_size, 0, (SOCKADDR*)&clntAdr, &clntAdrSz);
+		temp_pos_len = recvfrom(servSock, &temp_pos, sizeof(UPOINT), 0, (SOCKADDR*)&clntAdr, &clntAdrSz);
 		//sendto(servSock, message, strLen, 0, (SOCKADDR*)&clntAdr, sizeof(clntAdr));
+		printf("recvfrom temp_pos : %d %d\n", temp_pos.x, temp_pos.y);
+		sendto(servSock, &temp_pos, temp_pos_len, 0, (SOCKADDR*)&clntAdr, sizeof(clntAdr));
 	}
 	closesocket(servSock);
 	WSACleanup();
-
+#endif
 	//return 0;
 
 	Aboom[0] = "i<^>i";
@@ -59,6 +109,8 @@ int main(int argc, char *argv[])
 	Aboom[7] = "       ";
 	ptend.x = 36;
 	ptend.y = 12;
+
+	system("cls");
 
 	while (loop)
 	{
@@ -158,6 +210,12 @@ void  play()
 				ptMyoldpos2.x = ptthisMypos2.x;
 				if (--ptthisMypos.x < 1)ptthisMypos.x = 1;
 				if (--ptthisMypos2.x < 1)ptthisMypos2.x = 1;
+
+#if 0
+				clntAdrSz = sizeof(clntAdr);
+				strLen = recvfrom(servSock, message, buf_size, 0, (SOCKADDR*)&clntAdr, &clntAdrSz);
+				sendto(servSock, message, strLen, 0, (SOCKADDR*)&clntAdr, sizeof(clntAdr));
+#endif
 				DrawMyship(&ptthisMypos, &ptMyoldpos);
 				DrawMyship(&ptthisMypos2, &ptMyoldpos2);
 				break;
@@ -230,3 +288,4 @@ static void ErrorHandling(char* message)
 	fputc('\n', stderr);
 	exit(1);
 }
+#endif

@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include <conio.h>
 #include <wincon.h>
-#include "console_client.h"
+#include "Console_client.h"
 #include <stdlib.h>
 #include <string.h>
 

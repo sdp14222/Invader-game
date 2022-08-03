@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include "console.h"
+#include "Console.h"
+#if 0
 
 HANDLE hout;
 
@@ -42,3 +43,4 @@ void gotoxy(UPOINT pt)
 
 	SetConsoleCursorPosition(hout, pos);
 }
+#endif

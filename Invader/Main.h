@@ -13,13 +13,14 @@
 #define MAXMY_BULLET         3   
 #define MYSHIP_BASE_POSX    38  
 #define MYSHIP_BASE_POSY    23  
+#define USER_MAX_SIZE		4
 
 #include <winsock2.h>
 #include <windows.h>
 #include <stdio.h>
 #include <conio.h>
 #include <wincon.h>
-#include "console.h"
+#include "Console.h"
 #include <stdlib.h>
 #include <string.h>
 

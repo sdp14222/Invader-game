@@ -1,5 +1,5 @@
-#include "main.h"
-
+#include "Main.h"
+#if 0
 MYSHIP  myship;
 BULLET myship_bullet[MAXMY_BULLET];
 
@@ -97,4 +97,4 @@ int CheckMybullet(UPOINT ptthisMypos)
 }
 
 
-
+#endif
