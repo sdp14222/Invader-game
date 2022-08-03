@@ -82,7 +82,6 @@ int main(int argc, char* argv[])
 				else    // read message!
 				{
 					strLen = recv(reads.fd_array[i], buf, BUF_SIZE - 1, 0);
-					//strLen = recvfrom(reads.fd_array[i], buf, BUF_SIZE - 1, 0);
 					if (strLen == 0)    // close request!
 					{
 						FD_CLR(reads.fd_array[i], &reads);
