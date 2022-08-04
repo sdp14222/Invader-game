@@ -11,13 +11,16 @@
 
 unsigned WINAPI SendMsg(void* arg);
 unsigned WINAPI RecvMsg(void* arg);
+//unsigned WINAPI Play(void* arg);
 
-char name[NAME_SIZE] = "[DEFAULT]";
-char msg[BUF_SIZE];
+//char name[NAME_SIZE] = "[DEFAULT]";
+//char msg[BUF_SIZE];
 
 static SOCKET sock;
-static HANDLE hSndThread, hRcvThread;
-static s_flag = 0;
+static HANDLE hSndThread, hRcvThread;//, hPlayThread;
+static int gs_flag = 0;
+static int gstart_sig = 0;
+static int gloop = 1;
 #if 0
 int main(int argc, char* argv[])
 {
@@ -57,7 +60,7 @@ int main(int argc, char* argv[])
 	//char message[sizeof(struct USER_ADDR_INFO)];
 	char message[50];
 
-	int	loop = 1;
+	//int	loop = 1;
 
 	if (argc != 3)
 	{
@@ -112,16 +115,17 @@ int main(int argc, char* argv[])
 	//WaitForSingleObject(hSndThread, INFINITE);
 	//WaitForSingleObject(hRcvThread, INFINITE);
 
-	while (loop)
+	while (gloop)
 	{
-		DWORD         thisTickCount = GetTickCount();
-		DWORD         bcount = thisTickCount;
-		int           bp = 0;
-
-		if (s_flag)
+		if (gs_flag)
 		{
+			DWORD         thisTickCount = GetTickCount();
+			DWORD         bcount = thisTickCount;
+			int           bp = 0;
+
 			system("cls");
 			play();
+			//hPlayThread = (HANDLE)_beginthreadex(NULL, 0, Play, (void*)&sock, 0, NULL);
 
 			for (;;)
 			{
@@ -157,10 +161,10 @@ int main(int argc, char* argv[])
 				killnum = 0;
 				timeflag = 0;
 				ptend.y = 12;
-				loop = 1;
+				gloop = 1;
 			}
 			else
-				loop = 0;
+				gloop = 0;
 		}
 	}
 	strcpy(message, "quitandclose");
@@ -296,42 +300,47 @@ static void ErrorHandling(char* message)
 unsigned WINAPI SendMsg(void* arg)   // send thread main
 {
 	char message[100];
+	int print_flag = 1;
+
 	while (1)
 	{
-#if 0
-		printf(">> ");
-		fgets(msg, BUF_SIZE, stdin);
-		if (!strcmp(msg, "q\n") || !strcmp(msg, "Q\n"))
+		if (!gs_flag)
 		{
-			closesocket(hSock);
-			exit(0);
-		}
-		sprintf(nameMsg, "%s %s", name, msg);
-#endif
-		if (!s_flag)
-		{
-			Sleep(500);
-			fputs("Insert message(q to quit, s to start): ", stdout);
-			fgets(message, sizeof(message), stdin);
-			if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
+			if (print_flag)
 			{
-				strcpy(message, "quitandclose");
-				send(sock, message, strlen(message), 0);
-				int a = closesocket(sock);
-				printf("closesocket() %d\n", a);
-				WSACleanup();
-				//exit(1);
-				break;
+				print_flag = 0;
+				fputs("Insert message(q to quit, s to start): ", stdout);
 			}
-			if (!strcmp(message, "s\n") || !strcmp(message, "S\n"))
+			else if (gstart_sig)
 			{
-				strcpy(message, "startandclear");
+				gs_flag = 1;
 			}
-			send(sock, message, strlen(message), 0);
+			else
+			{
+				if (kbhit())
+				{
+					print_flag = 1;
+					//Sleep(500);
+					//fputs("Insert message(q to quit, s to start): ", stdout);
+					fgets(message, sizeof(message), stdin);
+
+					if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
+					{
+						gloop = 0;
+						break;
+					}
+					if (!strcmp(message, "s\n") || !strcmp(message, "S\n"))
+					{
+						strcpy(message, "startandclear");
+					}
+					send(sock, message, strlen(message), 0);
+				}
+			}
 		}
 		else
 		{
-
+			//Sleep(1000);
+			//printf("hi\n");
 		}
 	}
 	return 0;
@@ -344,7 +353,7 @@ unsigned WINAPI RecvMsg(void* arg)   // read thread main
 
 	while (1)
 	{
-		if (!s_flag)
+		if (!gs_flag)
 		{
 #if 0
 			strLen = recv(hSock, nameMsg, NAME_SIZE + BUF_SIZE - 1, 0);
@@ -358,7 +367,8 @@ unsigned WINAPI RecvMsg(void* arg)   // read thread main
 
 			if (strstr(message, "startandclear"))
 			{
-				s_flag = 1;
+				//s_flag = 1;
+				gstart_sig = 1;
 			}
 			else
 			{
@@ -374,3 +384,10 @@ unsigned WINAPI RecvMsg(void* arg)   // read thread main
 	}
 	return 0;
 }
+
+#if 0
+unsigned WINAPI Play(void* arg)
+{
+	play();
+}
+#endif
